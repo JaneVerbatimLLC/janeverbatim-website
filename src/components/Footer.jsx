@@ -2,28 +2,35 @@ import { Link } from "react-router";
 import MapPinIcon from "icon:map-pin";
 import PhoneIcon from "icon:phone";
 import MailIcon from "icon:mail";
-import InstagramIcon from "icon:link";
+import LinkIcon from "icon:link";
 
 export default function Footer() {
   return (
     <footer className="bg-charcoal border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      {/* Top stripe */}
+      <div className="h-1 bg-clay" />
+
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:pl-16 py-14 sm:py-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
+
           {/* Brand */}
-          <div className="lg:col-span-2">
-            <img src="/static/jvllc-logo.jpeg" alt="Jane Verbatim LLC" className="h-14 w-auto rounded-sm mb-4" />
-            <p className="text-cream/60 font-body text-sm leading-relaxed max-w-sm">
-              Brooklyn's premier small business consulting firm. Precision in Strategy. Power in Scale.
+          <div className="lg:col-span-5">
+            <img src="/static/jvllc-logo.png" alt="Jane Verbatim LLC" className="h-14 w-auto mb-5" />
+            <p className="text-cream/50 font-body text-sm leading-relaxed max-w-xs">
+              Brooklyn's premier small business consulting firm.<br />
+              <em className="text-cream/70 not-italic font-semibold">Precision in Strategy. Power in Scale.</em>
             </p>
-            <p className="mt-4 text-cream/40 font-body text-xs">
-              Serving Bed-Stuy · Crown Heights · Flatbush · East New York
+            <p className="mt-5 text-cream/25 font-body text-xs tracking-wider uppercase">
+              Bed-Stuy · Crown Heights · Flatbush · East New York
             </p>
           </div>
 
-          {/* Links */}
-          <div>
-            <h4 className="text-cream font-display text-sm font-semibold tracking-widest uppercase mb-4">Navigate</h4>
-            <ul className="space-y-2">
+          {/* Navigate */}
+          <div className="lg:col-span-3">
+            <h4 className="text-cream font-body text-xs font-bold tracking-[0.2em] uppercase mb-5 border-b border-white/10 pb-3">
+              Navigate
+            </h4>
+            <ul className="space-y-2.5">
               {[
                 { to: "/", label: "Home" },
                 { to: "/about", label: "About" },
@@ -31,39 +38,62 @@ export default function Footer() {
                 { to: "/contact", label: "Book a Session" },
               ].map(({ to, label }) => (
                 <li key={to}>
-                  <Link to={to} className="text-cream/55 font-body text-sm hover:text-clay transition-colors">{label}</Link>
+                  <Link
+                    to={to}
+                    className="text-cream/45 font-body text-sm hover:text-clay transition-colors"
+                  >
+                    {label}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
           {/* Contact */}
-          <div>
-            <h4 className="text-cream font-display text-sm font-semibold tracking-widest uppercase mb-4">Contact</h4>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-2">
+          <div className="lg:col-span-4">
+            <h4 className="text-cream font-body text-xs font-bold tracking-[0.2em] uppercase mb-5 border-b border-white/10 pb-3">
+              Contact
+            </h4>
+            <ul className="space-y-3.5">
+              <li className="flex items-start gap-3">
                 <MapPinIcon className="w-4 h-4 text-clay shrink-0 mt-0.5" />
-                <span className="text-cream/55 font-body text-sm">Brooklyn, New York</span>
+                <span className="text-cream/45 font-body text-sm">Brooklyn, New York</span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-center gap-3">
                 <PhoneIcon className="w-4 h-4 text-clay shrink-0" />
-                <a href="tel:6802059814" className="text-cream/55 font-body text-sm hover:text-clay transition-colors">680-205-9814</a>
+                <a href="tel:6802059814" className="text-cream/45 font-body text-sm hover:text-clay transition-colors">
+                  680-205-9814
+                </a>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-center gap-3">
                 <MailIcon className="w-4 h-4 text-clay shrink-0" />
-                <a href="mailto:jvllcnyc@pm.me" className="text-cream/55 font-body text-sm hover:text-clay transition-colors">jvllcnyc@pm.me</a>
+                <a href="mailto:jvllcnyc@pm.me" className="text-cream/45 font-body text-sm hover:text-clay transition-colors">
+                  jvllcnyc@pm.me
+                </a>
               </li>
-              <li className="flex items-center gap-2">
-                <InstagramIcon className="w-4 h-4 text-clay shrink-0" />
-                <a href="https://instagram.com/jane.verbatim.llc" target="_blank" rel="noopener noreferrer" className="text-cream/55 font-body text-sm hover:text-clay transition-colors">@jane.verbatim.llc</a>
+              <li className="flex items-center gap-3">
+                <LinkIcon className="w-4 h-4 text-clay shrink-0" />
+                <a
+                  href="https://instagram.com/jane.verbatim.llc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-cream/45 font-body text-sm hover:text-clay transition-colors"
+                >
+                  @jane.verbatim.llc
+                </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-cream/30 font-body text-xs">© 2026 Jane Verbatim LLC. All rights reserved.</p>
-          <p className="text-cream/30 font-body text-xs">Founded by Veranthoni "Vbouy" Campbell</p>
+        {/* Bottom bar */}
+        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-cream/25 font-body text-xs">
+            © 2026 Jane Verbatim LLC. All rights reserved.
+          </p>
+          <p className="text-cream/25 font-body text-xs">
+            Founded by Veranthoni "Vbouy" Campbell
+          </p>
         </div>
       </div>
     </footer>

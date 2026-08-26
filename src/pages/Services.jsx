@@ -10,6 +10,7 @@ const services = [
   {
     icon: BuildingIcon,
     accent: "clay",
+    num: "01",
     id: "architecture",
     title: "Business Architecture & Formation",
     tagline: "The structural foundation every serious business needs.",
@@ -25,6 +26,7 @@ const services = [
   {
     icon: AwardIcon,
     accent: "sage",
+    num: "02",
     id: "certifications",
     title: "Certifications & Equity Access",
     tagline: "The credentials that open doors and unlock capital.",
@@ -40,6 +42,7 @@ const services = [
   {
     icon: PaletteIcon,
     accent: "gold",
+    num: "03",
     id: "brand",
     title: "Brand Identity & Marketing",
     tagline: "A brand that commands attention and earns trust.",
@@ -55,6 +58,7 @@ const services = [
   {
     icon: BookOpenIcon,
     accent: "teal",
+    num: "04",
     id: "education",
     title: "Education & Professional Development",
     tagline: "Building the founder behind the business.",
@@ -69,108 +73,145 @@ const services = [
   },
 ];
 
-const accentMap = {
-  clay: { border: "border-clay/30", bg: "bg-clay/10", text: "text-clay", iconBg: "bg-clay/15 border-clay/30 text-clay", check: "text-clay" },
-  sage: { border: "border-sage/30", bg: "bg-sage/10", text: "text-sage", iconBg: "bg-sage/15 border-sage/30 text-sage", check: "text-sage" },
-  gold: { border: "border-gold/30", bg: "bg-gold/10", text: "text-gold", iconBg: "bg-gold/15 border-gold/30 text-gold", check: "text-gold" },
-  teal: { border: "border-teal/30", bg: "bg-teal/10", text: "text-teal", iconBg: "bg-teal/15 border-teal/30 text-teal", check: "text-teal" },
+const accentColor = {
+  clay: "#C4704A",
+  sage: "#4A6741",
+  gold: "#C9A84C",
+  teal: "#5B9EA0",
+};
+
+const accentText = {
+  clay: "text-clay",
+  sage: "text-sage",
+  gold: "text-gold",
+  teal: "text-teal",
 };
 
 export default function Services() {
   return (
     <div className="bg-charcoal min-h-screen pt-20">
-      {/* Hero */}
-      <section className="max-w-7xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
-        <div className="max-w-3xl">
-          <p className="text-clay font-body text-xs font-semibold tracking-widest uppercase mb-4">What We Offer</p>
-          <h1 className="font-display text-5xl sm:text-6xl text-cream leading-tight mb-6">
-            Services built for the{" "}
-            <em className="italic text-clay">real work</em>{" "}
-            of growing
-          </h1>
-          <p className="text-cream/60 font-body text-lg leading-relaxed">
-            From your first LLC filing to your 90-day content calendar, Jane Verbatim meets you exactly 
-            where you are — with the precision that gets you where you're going.
-          </p>
+
+      {/* ── Hero ── */}
+      <section className="relative border-b border-white/10 overflow-hidden">
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-clay hidden lg:block" />
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:pl-16 py-20 sm:py-28">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+            <div className="lg:col-span-7">
+              <p className="text-clay font-body text-xs font-bold tracking-[0.2em] uppercase mb-5">What We Offer</p>
+              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-cream leading-[1.0] tracking-tight">
+                Services built for<br />
+                the <em className="text-clay italic">real work</em><br />
+                of growing
+              </h1>
+            </div>
+            <div className="lg:col-span-5">
+              <p className="text-cream/55 font-body text-base sm:text-lg leading-relaxed">
+                From your first LLC filing to your 90-day content calendar, Jane Verbatim 
+                meets you exactly where you are — with the precision that gets you where 
+                you're going.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Services */}
-      <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-20 sm:pb-28 space-y-8">
-        {services.map(({ icon: Icon, accent, id, title, tagline, items }) => {
-          const a = accentMap[accent];
-          return (
-            <div key={id} className={`p-7 sm:p-10 bg-white/[0.03] border ${a.border} rounded-sm`}>
-              <div className="flex flex-col sm:flex-row sm:items-start gap-6">
-                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-sm border shrink-0 ${a.iconBg}`}>
-                  <Icon className="w-5 h-5" />
+      {/* ── Services ── */}
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 lg:pl-16 py-16 sm:py-24">
+        <div className="space-y-0 divide-y divide-white/10">
+          {services.map(({ icon: Icon, accent, num, id, title, tagline, items }) => (
+            <div key={id} className="group py-12 sm:py-16">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+
+                {/* Left — number + title */}
+                <div className="lg:col-span-5">
+                  <div className="flex items-start gap-5 mb-5">
+                    <span
+                      className={`font-display text-4xl font-bold opacity-25 group-hover:opacity-60 transition-opacity ${accentText[accent]}`}
+                    >
+                      {num}
+                    </span>
+                    <div
+                      className="inline-flex items-center justify-center w-10 h-10 border shrink-0 mt-1"
+                      style={{ borderColor: accentColor[accent] }}
+                    >
+                      <Icon className="w-5 h-5" style={{ color: accentColor[accent] }} />
+                    </div>
+                  </div>
+                  <h2 className={`font-display text-2xl sm:text-3xl mb-2 ${accentText[accent]}`}>{title}</h2>
+                  <p className="text-cream/40 font-body text-sm italic">{tagline}</p>
                 </div>
-                <div className="flex-1">
-                  <h2 className={`font-display text-2xl sm:text-3xl mb-1 ${a.text}`}>{title}</h2>
-                  <p className="text-cream/50 font-body text-sm italic mb-6">{tagline}</p>
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
+
+                {/* Right — items */}
+                <div className="lg:col-span-7">
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3.5">
                     {items.map((item) => (
                       <li key={item} className="flex items-start gap-3">
-                        <CheckIcon className={`w-4 h-4 shrink-0 mt-0.5 ${a.check}`} />
-                        <span className="text-cream/65 font-body text-sm leading-snug">{item}</span>
+                        <CheckIcon className="w-4 h-4 shrink-0 mt-0.5" style={{ color: accentColor[accent] }} />
+                        <span className="text-cream/60 font-body text-sm leading-snug">{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               </div>
             </div>
-          );
-        })}
+          ))}
+        </div>
       </section>
 
-      {/* Pricing note */}
-      <section className="border-t border-white/10 bg-white/[0.02]">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-            <div>
-              <p className="text-gold font-body text-xs font-semibold tracking-widest uppercase mb-3">Transparent Pricing</p>
-              <h2 className="font-display text-3xl sm:text-4xl text-cream mb-4">
-                Pricing that works for where you are
+      {/* ── Pricing note ── */}
+      <section className="border-t border-white/10 bg-white/[0.015]">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:pl-16 py-16 sm:py-20">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+            <div className="lg:col-span-5">
+              <p className="text-gold font-body text-xs font-bold tracking-[0.2em] uppercase mb-4">Transparent Pricing</p>
+              <h2 className="font-display text-3xl sm:text-4xl text-cream mb-5">
+                Pricing that works for<br />where you are
               </h2>
-              <p className="text-cream/60 font-body text-base leading-relaxed">
+              <p className="text-cream/55 font-body text-base leading-relaxed">
                 We believe every serious founder deserves access to strategic guidance. Our tiered pricing 
-                and stackable discount schedule — including SEE, DEI, bundle, and early-payment discounts — 
-                are built to remove financial barriers, not create them.
+                and stackable discount schedule are built to remove financial barriers, not create them.
               </p>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="lg:col-span-7 space-y-0 divide-y divide-white/10">
               {[
                 { label: "Social Equity Entrepreneur (SEE)", desc: "Verified SEE designation discount applied at intake" },
                 { label: "MWBE & DEI Discount", desc: "Certification or documented equity status required" },
                 { label: "Service Bundle Savings", desc: "Combine services for compound discounts" },
                 { label: "Early-Payment Discount", desc: "Pay in full upfront and save" },
               ].map(({ label, desc }) => (
-                <div key={label} className="flex gap-4 p-4 bg-white/[0.04] border border-white/10 rounded-sm">
+                <div key={label} className="flex gap-5 py-5">
                   <CheckIcon className="w-4 h-4 text-gold shrink-0 mt-0.5" />
                   <div>
                     <p className="text-cream font-body font-semibold text-sm">{label}</p>
-                    <p className="text-cream/45 font-body text-xs mt-0.5">{desc}</p>
+                    <p className="text-cream/40 font-body text-xs mt-0.5">{desc}</p>
                   </div>
                 </div>
               ))}
-
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="max-w-7xl mx-auto px-5 sm:px-8 py-16 text-center">
-        <h2 className="font-display text-3xl sm:text-4xl text-cream mb-4">Not sure which service fits?</h2>
-        <p className="text-cream/55 font-body text-base max-w-lg mx-auto mb-8">
-          Book a no-pressure strategy session and we'll map the right engagement together.
-        </p>
-        <Link
-          to="/contact"
-          className="inline-flex items-center gap-2 px-7 py-3.5 bg-clay text-cream font-body font-semibold text-sm rounded-sm hover:bg-clay/85 transition-colors"
-        >
-          Schedule a Conversation <ArrowRightIcon className="w-4 h-4" />
-        </Link>
+      {/* ── CTA ── */}
+      <section className="bg-cream">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:pl-16 py-16 sm:py-20">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-8">
+            <div>
+              <h2 className="font-display text-3xl sm:text-4xl text-charcoal mb-2">
+                Not sure which service fits?
+              </h2>
+              <p className="text-charcoal/55 font-body text-base">
+                Book a no-pressure session and we'll map the right path together.
+              </p>
+            </div>
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-charcoal text-cream font-body font-bold text-xs tracking-[0.15em] uppercase hover:bg-charcoal/85 transition-colors shrink-0 group"
+            >
+              Schedule a Conversation <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        </div>
       </section>
     </div>
   );
