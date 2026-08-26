@@ -1,6 +1,6 @@
 # Project Setup
 
-Last updated: 2026-08-26
+Last updated: 2026-08-26 (logo updated to transparent PNG; full editorial redesign)
 
 ## Site
 
@@ -24,7 +24,7 @@ Provided by the platform (available at runtime — never add these to `package.j
 
 - **Colors**: charcoal `#2C2C2C`, cream `#FAF5EE`, clay `#C4704A`, sage `#4A6741`, gold `#C9A84C`, teal `#5B9EA0`
 - **Typefaces**: Playfair Display (display/headings) + DM Sans (body) — loaded via `vite-ignore` link in index.html, declared in tailwind.config.cjs
-- **Logo**: `/static/jvllc-logo.jpeg`
+- **Logo**: `/static/jvllc-logo.png` (transparent background PNG; original JPEG also in static)
 - **Favicon**: `public/favicon.svg` (JV monogram in charcoal/clay)
 
 ## Structure
