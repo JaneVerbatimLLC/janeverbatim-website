@@ -6,21 +6,21 @@ import LinkIcon from "icon:link";
 
 export default function Footer() {
   return (
-    <footer className="bg-charcoal border-t border-white/10">
-      {/* Top stripe */}
-      <div className="h-1 bg-clay" />
+    <footer className="bg-charcoal border-t-4 border-charcoal">
 
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:pl-16 py-14 sm:py-20">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-14 sm:py-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
 
           {/* Brand */}
           <div className="lg:col-span-5">
-            <img src="/static/jvllc-logo.png" alt="Jane Verbatim LLC" className="h-14 w-auto mb-5" />
+            <div className="bg-cream inline-block p-3 mb-5">
+              <img src="/static/jvllc-logo.png" alt="Jane Verbatim LLC" className="h-12 w-auto" />
+            </div>
             <p className="text-cream/50 font-body text-sm leading-relaxed max-w-xs">
               Brooklyn's premier small business consulting firm.<br />
-              <em className="text-cream/70 not-italic font-semibold">Precision in Strategy. Power in Scale.</em>
+              <span className="text-cream/75 font-semibold not-italic">Precision in Strategy. Power in Scale.</span>
             </p>
-            <p className="mt-5 text-cream/25 font-body text-xs tracking-wider uppercase">
+            <p className="mt-5 text-cream/25 font-body text-xs tracking-widest uppercase">
               Bed-Stuy · Crown Heights · Flatbush · East New York
             </p>
           </div>
@@ -92,7 +92,7 @@ export default function Footer() {
             © 2026 Jane Verbatim LLC. All rights reserved.
           </p>
           <p className="text-cream/25 font-body text-xs">
-            Founded by Veranthoni "Vbouy" Campbell
+            Founded by Veranthoni "Vbouy" Campbell · Brooklyn, NY
           </p>
         </div>
       </div>

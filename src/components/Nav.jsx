@@ -23,11 +23,11 @@ export default function Nav() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-charcoal/97 backdrop-blur-md border-b border-white/10"
-          : "bg-transparent"
+          ? "bg-cream/95 backdrop-blur-md border-b border-charcoal/10 shadow-sm"
+          : "bg-cream border-b border-charcoal/10"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:pl-16 flex items-center justify-between h-16 sm:h-20">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 flex items-center justify-between h-16 sm:h-20">
 
         {/* Logo */}
         <Link to="/" className="flex items-center shrink-0" onClick={() => setOpen(false)}>
@@ -47,7 +47,7 @@ export default function Nav() {
               end={to === "/"}
               className={({ isActive }) =>
                 `px-4 py-2 text-xs font-body font-bold tracking-[0.15em] uppercase transition-colors duration-200 ${
-                  isActive ? "text-clay" : "text-cream/60 hover:text-cream"
+                  isActive ? "text-clay" : "text-charcoal/50 hover:text-charcoal"
                 }`
               }
             >
@@ -56,7 +56,7 @@ export default function Nav() {
           ))}
           <Link
             to="/contact"
-            className="ml-6 px-5 py-2.5 bg-clay text-cream text-xs font-body font-bold tracking-[0.15em] uppercase hover:bg-clay/85 transition-colors"
+            className="ml-6 px-5 py-2.5 bg-charcoal text-cream text-xs font-body font-bold tracking-[0.15em] uppercase hover:bg-clay transition-colors"
           >
             Book a Session
           </Link>
@@ -65,7 +65,7 @@ export default function Nav() {
         {/* Mobile Toggle */}
         <button
           onClick={() => setOpen(!open)}
-          className="lg:hidden text-cream p-2 hover:text-clay transition-colors"
+          className="lg:hidden text-charcoal p-2 hover:text-clay transition-colors"
           aria-label="Toggle menu"
         >
           {open ? <XIcon className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
@@ -74,7 +74,7 @@ export default function Nav() {
 
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden overflow-hidden transition-all duration-300 bg-charcoal border-t border-white/10 ${
+        className={`lg:hidden overflow-hidden transition-all duration-300 bg-cream border-t border-charcoal/10 ${
           open ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
@@ -86,8 +86,8 @@ export default function Nav() {
               end={to === "/"}
               onClick={() => setOpen(false)}
               className={({ isActive }) =>
-                `px-4 py-3.5 text-sm font-body font-bold tracking-wider uppercase border-b border-white/5 transition-colors duration-200 ${
-                  isActive ? "text-clay" : "text-cream/70 hover:text-cream"
+                `px-4 py-3.5 text-sm font-body font-bold tracking-wider uppercase border-b border-charcoal/8 transition-colors duration-200 ${
+                  isActive ? "text-clay" : "text-charcoal/60 hover:text-charcoal"
                 }`
               }
             >
