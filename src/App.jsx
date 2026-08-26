@@ -1,38 +1,42 @@
-import { Globe } from "lucide-react";
-import { Slot } from "@radix-ui/react-slot";
-import { twMerge } from "tailwind-merge";
+import { Routes, Route } from "react-router";
+import Nav from "./components/Nav.jsx";
+import Footer from "./components/Footer.jsx";
+import Home from "./pages/Home.jsx";
+import About from "./pages/About.jsx";
+import Services from "./pages/Services.jsx";
+import CivicCapital from "./pages/CivicCapital.jsx";
+import Contact from "./pages/Contact.jsx";
 
-function Button({ className, asChild = false, variant = "primary", ...props }) {
-  const Comp = asChild ? Slot : "button";
+function NotFound() {
   return (
-    <Comp
-      className={twMerge(
-        "inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-        "disabled:pointer-events-none disabled:opacity-50",
-        variant === "primary" && "bg-blue-600 text-white hover:bg-blue-700 focus-visible:ring-blue-600",
-        variant === "outline" && "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus-visible:ring-gray-400",
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
-function App() {
-  return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 flex items-center justify-center px-4">
-      <div className="text-center">
-        <Globe className="w-10 h-10 mx-auto text-gray-400 dark:text-gray-600" strokeWidth={1.5} />
-        <h1 className="mt-6 text-xl font-semibold tracking-tight text-gray-900 dark:text-gray-50">
-          We're setting up your site
-        </h1>
-        <p className="mt-2 text-sm text-gray-400 dark:text-gray-500">
-          This won't take long.
-        </p>
+    <div className="bg-charcoal min-h-screen flex items-center justify-center text-center px-5">
+      <div>
+        <p className="font-display text-7xl text-clay/30 mb-4">404</p>
+        <h1 className="font-display text-3xl text-cream mb-3">Page not found</h1>
+        <p className="text-cream/50 font-body text-base mb-8">That page doesn't exist, but we're here.</p>
+        <a href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-clay text-cream font-body font-semibold text-sm rounded-sm hover:bg-clay/85 transition-colors">
+          Back to Home
+        </a>
       </div>
     </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <div className="min-h-screen bg-charcoal flex flex-col">
+      <Nav />
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/civic-capital" element={<CivicCapital />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+      <Footer />
+    </div>
+  );
+}
