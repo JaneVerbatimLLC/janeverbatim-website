@@ -153,9 +153,7 @@ export default function Services() {
                   </div>
                 </div>
               ))}
-              <Link to="/civic-capital" className="text-clay font-body text-sm font-medium inline-flex items-center gap-1.5 hover:gap-2.5 transition-all mt-1">
-                Learn about our pro-bono program <ArrowRightIcon className="w-4 h-4" />
-              </Link>
+
             </div>
           </div>
         </div>

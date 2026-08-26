@@ -28,7 +28,6 @@ export default function Footer() {
                 { to: "/", label: "Home" },
                 { to: "/about", label: "About" },
                 { to: "/services", label: "Services" },
-                { to: "/civic-capital", label: "Civic Capital" },
                 { to: "/contact", label: "Book a Session" },
               ].map(({ to, label }) => (
                 <li key={to}>

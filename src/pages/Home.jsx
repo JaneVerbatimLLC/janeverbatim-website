@@ -195,7 +195,7 @@ export default function Home() {
                 { label: "Clarity over chaos", sub: "We audit your operations and hand you a roadmap, not a to-do list." },
                 { label: "Identity as infrastructure", sub: "Your brand is your most leveraged business asset — we make it work." },
                 { label: "Community as strategy", sub: "Local roots aren't a limitation. They're your competitive edge." },
-                { label: "Equity-centered access", sub: "Tiered pricing and pro-bono work ensure the door stays open." },
+                { label: "Equity-centered access", sub: "Tiered pricing and stackable discounts ensure serious founders get in the door regardless of budget." },
               ].map(({ label, sub }) => (
                 <div key={label} className="flex gap-4 p-5 bg-white/[0.03] border border-white/10 rounded-sm">
                   <CheckIcon className="w-5 h-5 text-sage shrink-0 mt-0.5" />

@@ -13,7 +13,7 @@ const serviceOptions = [
   "Cannabis Compliance",
   "Brand Identity & Marketing",
   "Education & Professional Development",
-  "Civic Capital / Pro-Bono Inquiry",
+
   "Not sure yet — I'd like to discuss",
 ];
 

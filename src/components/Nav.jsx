@@ -17,7 +17,6 @@ export default function Nav() {
     { to: "/", label: "Home" },
     { to: "/about", label: "About" },
     { to: "/services", label: "Services" },
-    { to: "/civic-capital", label: "Civic Capital" },
     { to: "/contact", label: "Book a Session" },
   ];
 
@@ -35,7 +34,7 @@ export default function Nav() {
 
         {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center gap-1">
-          {links.slice(0, 4).map(({ to, label }) => (
+          {links.slice(0, 3).map(({ to, label }) => (
             <NavLink
               key={to}
               to={to}

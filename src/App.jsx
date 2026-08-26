@@ -4,7 +4,6 @@ import Footer from "./components/Footer.jsx";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import Services from "./pages/Services.jsx";
-import CivicCapital from "./pages/CivicCapital.jsx";
 import Contact from "./pages/Contact.jsx";
 
 function NotFound() {
@@ -31,7 +30,6 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
-          <Route path="/civic-capital" element={<CivicCapital />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
