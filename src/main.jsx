@@ -4,11 +4,9 @@ import { BrowserRouter } from "react-router";
 import App from "./App.jsx";
 import "./index.css";
 
-const basename = new URL(document.baseURI).pathname.replace(/\/$/, "");
-
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter basename={basename}>
+    <BrowserRouter>
       <App />
     </BrowserRouter>
   </StrictMode>,
