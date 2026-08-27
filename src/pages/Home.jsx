@@ -1,10 +1,13 @@
 import { Link } from "react-router";
+import { useState, useEffect } from "react";
 import ArrowRightIcon from "icon:arrow-right";
 import CheckIcon from "icon:check";
 import TrendingUpIcon from "icon:trending-up";
 import ShieldIcon from "icon:shield";
 import StarIcon from "icon:star";
 import UsersIcon from "icon:users";
+import QuoteIcon from "icon:quote";
+import { pb } from "../lib/pb.js";
 
 const services = [
   {
@@ -42,6 +45,110 @@ const services = [
 ];
 
 const neighborhoods = ["Bed-Stuy", "Crown Heights", "Flatbush", "East New York"];
+
+function Testimonials() {
+  const [items, setItems] = useState([]);
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    pb.collection("testimonials").getList(1, 20, {
+      sort: "-created",
+      signal: controller.signal,
+    })
+      .then(r => setItems(r.items))
+      .catch(err => { if (!err?.isAbort) console.error(err); });
+    return () => controller.abort();
+  }, []);
+
+  if (items.length === 0) return null;
+
+  const current = items[idx];
+
+  return (
+    <section className="border-b-4 border-charcoal bg-charcoal">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
+          <div>
+            <p className="text-clay font-body text-xs font-bold tracking-[0.25em] uppercase mb-3">What Founders Say</p>
+            <h2 className="font-display text-4xl sm:text-5xl text-cream leading-tight font-black">
+              Real results.<br />
+              <em className="text-clay italic font-black">Real Brooklyn.</em>
+            </h2>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => setIdx(i => (i - 1 + items.length) % items.length)}
+              className="w-10 h-10 border-2 border-cream/20 text-cream/50 hover:border-clay hover:text-clay transition-colors flex items-center justify-center font-body font-bold"
+              aria-label="Previous testimonial"
+            >
+              ←
+            </button>
+            <span className="font-body text-xs text-cream/30 w-16 text-center">
+              {idx + 1} / {items.length}
+            </span>
+            <button
+              onClick={() => setIdx(i => (i + 1) % items.length)}
+              className="w-10 h-10 border-2 border-cream/20 text-cream/50 hover:border-clay hover:text-clay transition-colors flex items-center justify-center font-body font-bold"
+              aria-label="Next testimonial"
+            >
+              →
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          {/* Large quote */}
+          <div className="lg:col-span-8">
+            <QuoteIcon className="w-10 h-10 text-clay mb-6 opacity-60" />
+            <blockquote
+              className="font-display text-2xl sm:text-3xl lg:text-4xl text-cream leading-snug font-bold mb-8"
+              key={current.id}
+            >
+              "{current.quote}"
+            </blockquote>
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-clay flex items-center justify-center font-display font-black text-cream text-lg">
+                {current.client_name?.charAt(0)}
+              </div>
+              <div>
+                <p className="font-body font-bold text-cream text-sm">{current.client_name}</p>
+                {current.business_name && (
+                  <p className="font-body text-cream/50 text-xs">{current.business_name}</p>
+                )}
+                {current.neighborhood && (
+                  <p className="font-body text-clay text-xs font-bold uppercase tracking-widest mt-0.5">{current.neighborhood}</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Right: dots + service tag */}
+          <div className="lg:col-span-4 flex flex-col gap-6 lg:pt-16">
+            {current.service && (
+              <div className="border border-cream/10 px-5 py-4">
+                <p className="text-cream/30 font-body text-xs uppercase tracking-widest font-bold mb-1">Service</p>
+                <p className="text-cream font-body text-sm font-bold">{current.service}</p>
+              </div>
+            )}
+            {/* Dot indicators */}
+            <div className="flex flex-wrap gap-2">
+              {items.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setIdx(i)}
+                  className={`w-2 h-2 rounded-full transition-all ${i === idx ? "bg-clay w-6" : "bg-cream/20 hover:bg-cream/40"}`}
+                  aria-label={`Go to testimonial ${i + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function Home() {
   return (
@@ -269,6 +376,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── Testimonials ── */}
+      <Testimonials />
 
       {/* ── CTA banner ── */}
       <section className="bg-charcoal">
