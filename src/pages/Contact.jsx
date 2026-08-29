@@ -4,7 +4,19 @@ import PhoneIcon from "icon:phone";
 import MailIcon from "icon:mail";
 import InstagramIcon from "icon:link";
 import CheckCircleIcon from "icon:check-circle";
+import ChevronDownIcon from "icon:chevron-down";
+import ChevronUpIcon from "icon:chevron-up";
 import { pb } from "../lib/pb.js";
+
+const CIA_SUMMARY = `By submitting this form, you acknowledge that:
+
+• Jane Verbatim LLC will contact you to schedule a strategy session. No payment is required at this stage.
+
+• If you proceed to engage Jane Verbatim LLC's services, you will be asked to sign a full Consulting & Independent Agreement (CIA) before work begins. That agreement covers scope of work, payment terms, confidentiality, intellectual property, and governing law (State of New York, Kings County).
+
+• Any information you share in this form is kept confidential and used solely to prepare for your consultation.
+
+• Jane Verbatim LLC operates as an independent for-profit consulting firm. The firm does not provide legal, accounting, or financial advice and recommends seeking licensed professionals for those needs.`;
 
 const neighborhoods = ["Bed-Stuy", "Crown Heights", "Flatbush", "East New York", "Other / Outside Brooklyn"];
 const serviceOptions = [
@@ -29,6 +41,8 @@ export default function Contact() {
     message: "",
   });
   const [status, setStatus] = useState("idle");
+  const [agreedToCIA, setAgreedToCIA] = useState(false);
+  const [showCIA, setShowCIA] = useState(false);
 
   function handleChange(e) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -36,11 +50,13 @@ export default function Contact() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!agreedToCIA) { return; }
     setStatus("submitting");
     try {
       await pb.collection("strategy_sessions").create(form);
       setStatus("success");
       setForm({ full_name: "", email: "", phone: "", business_name: "", neighborhood: "", service_interest: "", message: "" });
+      setAgreedToCIA(false);
     } catch {
       setStatus("error");
     }
@@ -194,6 +210,46 @@ export default function Contact() {
                   />
                 </div>
 
+                {/* CIA Agreement acknowledgment */}
+                <div className="border-2 border-charcoal/20">
+                  <button
+                    type="button"
+                    onClick={() => setShowCIA(s => !s)}
+                    className="w-full flex items-center justify-between px-4 py-3 hover:bg-charcoal/3 transition-colors"
+                  >
+                    <span className="font-body text-xs font-bold text-charcoal/50 uppercase tracking-widest">
+                      Consulting Agreement Summary
+                    </span>
+                    {showCIA ? <ChevronUpIcon className="w-4 h-4 text-charcoal/40" /> : <ChevronDownIcon className="w-4 h-4 text-charcoal/40" />}
+                  </button>
+                  {showCIA && (
+                    <div className="px-4 pb-4 border-t border-charcoal/10">
+                      <pre className="font-body text-xs text-charcoal/60 leading-relaxed whitespace-pre-wrap mt-3">{CIA_SUMMARY}</pre>
+                    </div>
+                  )}
+                </div>
+
+                <label className="flex items-start gap-3 cursor-pointer group">
+                  <div className="relative mt-0.5 shrink-0">
+                    <input
+                      type="checkbox"
+                      checked={agreedToCIA}
+                      onChange={e => setAgreedToCIA(e.target.checked)}
+                      className="sr-only"
+                    />
+                    <div
+                      className={`w-5 h-5 border-2 flex items-center justify-center transition-colors ${
+                        agreedToCIA ? "bg-charcoal border-charcoal" : "border-charcoal/30 group-hover:border-charcoal"
+                      }`}
+                    >
+                      {agreedToCIA && <CheckCircleIcon className="w-3 h-3 text-cream" />}
+                    </div>
+                  </div>
+                  <span className="font-body text-xs text-charcoal/60 leading-relaxed">
+                    I understand that submitting this form does not begin any paid engagement. If I choose to work with Jane Verbatim LLC, I will sign a full Consulting & Independent Agreement before work begins. <span className="text-clay">*</span>
+                  </span>
+                </label>
+
                 {status === "error" && (
                   <p className="text-clay font-body text-sm bg-clay/10 border-2 border-clay/30 px-4 py-3">
                     Something went wrong. Please try again or email us at jvllcnyc@pm.me.
@@ -202,8 +258,8 @@ export default function Contact() {
 
                 <button
                   type="submit"
-                  disabled={status === "submitting"}
-                  className="px-8 py-4 bg-charcoal text-cream font-body font-bold text-xs tracking-widest uppercase hover:bg-clay disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                  disabled={status === "submitting" || !agreedToCIA}
+                  className="px-8 py-4 bg-charcoal text-cream font-body font-bold text-xs tracking-widest uppercase hover:bg-clay disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                 >
                   {status === "submitting" ? "Sending…" : "Submit Intake Form"}
                 </button>

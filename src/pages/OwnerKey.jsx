@@ -203,6 +203,113 @@ function LoginGate({ onLogin }) {
   );
 }
 
+function TestimonialsManager({ testimonials, loading, setTestimonials, formatDate }) {
+  const [busy, setBusy] = useState({});
+  const [confirmDelete, setConfirmDelete] = useState(null);
+
+  async function toggleFeatured(t) {
+    setBusy(b => ({ ...b, [t.id]: "feature" }));
+    try {
+      await pb.collection("testimonials").update(t.id, { featured: !t.featured });
+      setTestimonials(prev => prev.map(x => x.id === t.id ? { ...x, featured: !t.featured } : x));
+    } catch (e) { console.error(e); }
+    setBusy(b => ({ ...b, [t.id]: null }));
+  }
+
+  async function deleteTestimonial(id) {
+    setBusy(b => ({ ...b, [id]: "delete" }));
+    try {
+      await pb.collection("testimonials").delete(id);
+      setTestimonials(prev => prev.filter(x => x.id !== id));
+    } catch (e) { console.error(e); }
+    setBusy(b => ({ ...b, [id]: null }));
+    setConfirmDelete(null);
+  }
+
+  return (
+    <div>
+      <p className="font-body text-xs text-charcoal/40 uppercase tracking-widest font-bold mb-6">
+        Toggle carousel visibility or remove testimonials below.
+      </p>
+      {loading ? (
+        <div className="text-charcoal/40 font-body text-sm py-12 text-center">Loading testimonials…</div>
+      ) : testimonials.length === 0 ? (
+        <div className="border-2 border-dashed border-charcoal/20 py-16 text-center">
+          <p className="font-body text-charcoal/40 text-sm">No testimonials yet.</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {testimonials.map(t => (
+            <div key={t.id} className={`border-2 transition-colors ${t.featured ? "border-sage/40" : "border-charcoal/15"}`}>
+              {confirmDelete === t.id ? (
+                <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-red-50">
+                  <p className="font-body text-sm text-charcoal font-bold">Remove this testimonial permanently?</p>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => deleteTestimonial(t.id)}
+                      disabled={busy[t.id] === "delete"}
+                      className="px-4 py-2 bg-red-600 text-white font-body font-bold text-xs tracking-widest uppercase hover:bg-red-700 transition-colors disabled:opacity-50"
+                    >
+                      {busy[t.id] === "delete" ? "Removing…" : "Yes, remove"}
+                    </button>
+                    <button
+                      onClick={() => setConfirmDelete(null)}
+                      className="px-4 py-2 border-2 border-charcoal/30 text-charcoal font-body font-bold text-xs tracking-widest uppercase hover:border-charcoal transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-5">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 bg-clay flex items-center justify-center font-display font-black text-cream text-sm shrink-0">
+                        {t.client_name?.charAt(0)}
+                      </div>
+                      <div>
+                        <p className="font-body font-bold text-charcoal text-sm">{t.client_name}</p>
+                        <div className="flex flex-wrap gap-x-3 gap-y-0.5">
+                          {t.business_name && <span className="font-body text-xs text-charcoal/40">{t.business_name}</span>}
+                          {t.neighborhood && <span className="font-body text-xs text-teal font-bold">{t.neighborhood}</span>}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        onClick={() => toggleFeatured(t)}
+                        disabled={!!busy[t.id]}
+                        className={`px-3 py-1.5 font-body font-bold text-xs tracking-widest uppercase transition-colors border-2 disabled:opacity-50 ${
+                          t.featured
+                            ? "bg-sage/10 border-sage text-sage hover:bg-red-50 hover:border-red-400 hover:text-red-600"
+                            : "bg-charcoal/5 border-charcoal/20 text-charcoal/40 hover:bg-sage/10 hover:border-sage hover:text-sage"
+                        }`}
+                      >
+                        {busy[t.id] === "feature" ? "…" : t.featured ? "✓ In Carousel" : "+ Add to Carousel"}
+                      </button>
+                      <button
+                        onClick={() => setConfirmDelete(t.id)}
+                        className="px-3 py-1.5 border-2 border-charcoal/15 text-charcoal/30 font-body font-bold text-xs tracking-widest uppercase hover:border-red-400 hover:text-red-500 transition-colors"
+                      >
+                        Remove
+                      </button>
+                      <span className="text-charcoal/25 font-body text-xs hidden sm:block">{formatDate(t.created)}</span>
+                    </div>
+                  </div>
+                  <blockquote className="font-body text-sm text-charcoal/65 leading-relaxed italic border-l-2 border-clay pl-4">
+                    "{t.quote}"
+                  </blockquote>
+                  {t.service && <p className="mt-2 font-body text-xs text-clay font-bold">{t.service}</p>}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function AgreementForm() {
   const [form, setForm] = useState({
     client_name: "",
@@ -396,53 +503,12 @@ function AgreementForm() {
 
         {/* Testimonials Tab */}
         {activeTab === "testimonials" && (
-          <div>
-            <p className="font-body text-xs text-charcoal/40 uppercase tracking-widest font-bold mb-6">
-              Client testimonials — featured ones appear on the home page carousel.
-            </p>
-            {loadingTestimonials ? (
-              <div className="text-charcoal/40 font-body text-sm py-12 text-center">Loading testimonials…</div>
-            ) : testimonials.length === 0 ? (
-              <div className="border-2 border-dashed border-charcoal/20 py-16 text-center">
-                <p className="font-body text-charcoal/40 text-sm">No testimonials yet.</p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {testimonials.map(t => (
-                  <div key={t.id} className="border-2 border-charcoal/15 hover:border-charcoal transition-colors">
-                    <div className="p-6">
-                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 bg-clay flex items-center justify-center font-display font-black text-cream text-sm shrink-0">
-                            {t.client_name?.charAt(0)}
-                          </div>
-                          <div>
-                            <p className="font-body font-bold text-charcoal text-sm">{t.client_name}</p>
-                            <div className="flex flex-wrap gap-x-3 gap-y-0.5">
-                              {t.business_name && <span className="font-body text-xs text-charcoal/40">{t.business_name}</span>}
-                              {t.neighborhood && <span className="font-body text-xs text-teal font-bold">{t.neighborhood}</span>}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-3 shrink-0">
-                          <span className={`px-2 py-1 font-body text-xs font-bold uppercase tracking-widest ${t.featured ? "bg-sage/10 text-sage" : "bg-charcoal/5 text-charcoal/30"}`}>
-                            {t.featured ? "Featured" : "Not featured"}
-                          </span>
-                          <p className="font-body text-xs text-charcoal/30">{formatDate(t.created)}</p>
-                        </div>
-                      </div>
-                      <blockquote className="font-body text-sm text-charcoal/65 leading-relaxed italic border-l-2 border-clay pl-4">
-                        "{t.quote}"
-                      </blockquote>
-                      {t.service && (
-                        <p className="mt-2 font-body text-xs text-clay font-bold">{t.service}</p>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <TestimonialsManager
+            testimonials={testimonials}
+            loading={loadingTestimonials}
+            setTestimonials={setTestimonials}
+            formatDate={formatDate}
+          />
         )}
 
         {/* View Agreements Tab */}

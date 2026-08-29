@@ -36,6 +36,7 @@ export default function Footer() {
                 { to: "/about", label: "About" },
                 { to: "/services", label: "Services" },
                 { to: "/contact", label: "Book a Session" },
+                { to: "/share-your-story", label: "Share Your Story" },
               ].map(({ to, label }) => (
                 <li key={to}>
                   <Link
@@ -86,14 +87,30 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-cream/25 font-body text-xs">
-            © 2026 Jane Verbatim LLC. All rights reserved.
-          </p>
-          <p className="text-cream/25 font-body text-xs">
-            Founded by Veranthoni "Vbouy" Campbell · Brooklyn, NY
-          </p>
+        {/* Registration numbers */}
+        <div className="mt-12 pt-6 border-t border-white/10">
+          <div className="flex flex-wrap gap-x-8 gap-y-2 mb-5">
+            {[
+              { label: "EIN", value: "39-5158843", note: "Issued July 1, 2026" },
+              { label: "NY LLC DOS ID", value: "7528621" },
+              { label: "D-U-N-S", value: "13-677-7236" },
+              { label: "SAM.gov UEI", value: "SPAJDNMXJ1M1" },
+            ].map(({ label, value, note }) => (
+              <div key={label} className="flex items-center gap-2">
+                <span className="text-cream/25 font-body text-xs font-bold uppercase tracking-widest">{label}:</span>
+                <span className="text-cream/40 font-body text-xs">{value}</span>
+                {note && <span className="text-cream/20 font-body text-xs">· {note}</span>}
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <p className="text-cream/25 font-body text-xs">
+              © 2026 Jane Verbatim LLC. All rights reserved.
+            </p>
+            <p className="text-cream/25 font-body text-xs">
+              Founded by Veranthoni "Vbouy" Campbell · Brooklyn, NY
+            </p>
+          </div>
         </div>
       </div>
     </footer>
