@@ -219,17 +219,38 @@ function AgreementForm() {
   const [error, setError] = useState("");
   const [agreements, setAgreements] = useState([]);
   const [loadingAgreements, setLoadingAgreements] = useState(true);
-  const [activeTab, setActiveTab] = useState("view"); // "view" | "new"
+  const [intakeForms, setIntakeForms] = useState([]);
+  const [loadingIntake, setLoadingIntake] = useState(true);
+  const [testimonials, setTestimonials] = useState([]);
+  const [loadingTestimonials, setLoadingTestimonials] = useState(true);
+  const [activeTab, setActiveTab] = useState("intake"); // "intake" | "testimonials" | "view" | "new"
 
   useEffect(() => {
     const controller = new AbortController();
-    pb.collection("cia_agreements").getList(1, 50, {
+    pb.collection("cia_agreements").getList(1, 100, {
       sort: "-created",
       signal: controller.signal,
     })
       .then(r => setAgreements(r.items))
       .catch(err => { if (!err?.isAbort) console.error(err); })
       .finally(() => setLoadingAgreements(false));
+
+    pb.collection("strategy_sessions").getList(1, 100, {
+      sort: "-created",
+      signal: controller.signal,
+    })
+      .then(r => setIntakeForms(r.items))
+      .catch(err => { if (!err?.isAbort) console.error(err); })
+      .finally(() => setLoadingIntake(false));
+
+    pb.collection("testimonials").getList(1, 100, {
+      sort: "-created",
+      signal: controller.signal,
+    })
+      .then(r => setTestimonials(r.items))
+      .catch(err => { if (!err?.isAbort) console.error(err); })
+      .finally(() => setLoadingTestimonials(false));
+
     return () => controller.abort();
   }, [submitted]);
 
@@ -290,15 +311,17 @@ function AgreementForm() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-0 border-2 border-charcoal mb-10 w-fit">
+        <div className="flex flex-wrap gap-0 border-2 border-charcoal mb-10 w-fit">
           {[
-            { id: "view", label: `Signed Agreements (${agreements.length})` },
+            { id: "intake", label: `Intake Forms (${intakeForms.length})` },
+            { id: "testimonials", label: `Testimonials (${testimonials.length})` },
+            { id: "view", label: `Agreements (${agreements.length})` },
             { id: "new", label: "New Agreement" },
           ].map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-6 py-3 font-body font-bold text-xs tracking-widest uppercase transition-colors ${
+              className={`px-5 py-3 font-body font-bold text-xs tracking-widest uppercase transition-colors ${
                 activeTab === tab.id ? "bg-charcoal text-cream" : "bg-cream text-charcoal/50 hover:text-charcoal"
               }`}
             >
@@ -306,6 +329,121 @@ function AgreementForm() {
             </button>
           ))}
         </div>
+
+        {/* Intake Forms Tab */}
+        {activeTab === "intake" && (
+          <div>
+            <p className="font-body text-xs text-charcoal/40 uppercase tracking-widest font-bold mb-6">
+              Strategy session requests from founders — respond within one business day.
+            </p>
+            {loadingIntake ? (
+              <div className="text-charcoal/40 font-body text-sm py-12 text-center">Loading submissions…</div>
+            ) : intakeForms.length === 0 ? (
+              <div className="border-2 border-dashed border-charcoal/20 py-16 text-center">
+                <p className="font-body text-charcoal/40 text-sm">No intake forms submitted yet.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {intakeForms.map(f => (
+                  <div key={f.id} className="border-2 border-charcoal/15 hover:border-charcoal transition-colors">
+                    <div className="p-6">
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+                        <div>
+                          <p className="font-display font-bold text-charcoal text-lg">{f.full_name}</p>
+                          <div className="flex flex-wrap gap-x-5 gap-y-1 mt-1">
+                            {f.business_name && <span className="font-body text-xs text-charcoal/50">{f.business_name}</span>}
+                            {f.neighborhood && <span className="font-body text-xs text-teal font-bold">{f.neighborhood}</span>}
+                          </div>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <p className="font-body text-xs text-charcoal/30 font-bold uppercase tracking-widest">Received</p>
+                          <p className="font-body text-xs text-charcoal/60 mt-0.5">{formatDate(f.created)}</p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4 text-xs font-body">
+                        {f.email && (
+                          <div className="bg-charcoal/3 px-3 py-2">
+                            <p className="text-charcoal/40 font-bold uppercase tracking-widest mb-0.5">Email</p>
+                            <a href={`mailto:${f.email}`} className="text-clay hover:underline">{f.email}</a>
+                          </div>
+                        )}
+                        {f.phone && (
+                          <div className="bg-charcoal/3 px-3 py-2">
+                            <p className="text-charcoal/40 font-bold uppercase tracking-widest mb-0.5">Phone</p>
+                            <a href={`tel:${f.phone}`} className="text-charcoal/70 hover:text-clay">{f.phone}</a>
+                          </div>
+                        )}
+                        {f.service_interest && (
+                          <div className="bg-charcoal/3 px-3 py-2">
+                            <p className="text-charcoal/40 font-bold uppercase tracking-widest mb-0.5">Interest</p>
+                            <p className="text-charcoal/70">{f.service_interest}</p>
+                          </div>
+                        )}
+                      </div>
+                      {f.message && (
+                        <div className="border-t border-charcoal/8 pt-4">
+                          <p className="text-charcoal/30 font-body text-xs uppercase tracking-widest font-bold mb-2">Message</p>
+                          <p className="font-body text-sm text-charcoal/65 leading-relaxed">{f.message}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Testimonials Tab */}
+        {activeTab === "testimonials" && (
+          <div>
+            <p className="font-body text-xs text-charcoal/40 uppercase tracking-widest font-bold mb-6">
+              Client testimonials — featured ones appear on the home page carousel.
+            </p>
+            {loadingTestimonials ? (
+              <div className="text-charcoal/40 font-body text-sm py-12 text-center">Loading testimonials…</div>
+            ) : testimonials.length === 0 ? (
+              <div className="border-2 border-dashed border-charcoal/20 py-16 text-center">
+                <p className="font-body text-charcoal/40 text-sm">No testimonials yet.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {testimonials.map(t => (
+                  <div key={t.id} className="border-2 border-charcoal/15 hover:border-charcoal transition-colors">
+                    <div className="p-6">
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 bg-clay flex items-center justify-center font-display font-black text-cream text-sm shrink-0">
+                            {t.client_name?.charAt(0)}
+                          </div>
+                          <div>
+                            <p className="font-body font-bold text-charcoal text-sm">{t.client_name}</p>
+                            <div className="flex flex-wrap gap-x-3 gap-y-0.5">
+                              {t.business_name && <span className="font-body text-xs text-charcoal/40">{t.business_name}</span>}
+                              {t.neighborhood && <span className="font-body text-xs text-teal font-bold">{t.neighborhood}</span>}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3 shrink-0">
+                          <span className={`px-2 py-1 font-body text-xs font-bold uppercase tracking-widest ${t.featured ? "bg-sage/10 text-sage" : "bg-charcoal/5 text-charcoal/30"}`}>
+                            {t.featured ? "Featured" : "Not featured"}
+                          </span>
+                          <p className="font-body text-xs text-charcoal/30">{formatDate(t.created)}</p>
+                        </div>
+                      </div>
+                      <blockquote className="font-body text-sm text-charcoal/65 leading-relaxed italic border-l-2 border-clay pl-4">
+                        "{t.quote}"
+                      </blockquote>
+                      {t.service && (
+                        <p className="mt-2 font-body text-xs text-clay font-bold">{t.service}</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* View Agreements Tab */}
         {activeTab === "view" && (

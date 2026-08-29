@@ -6,6 +6,7 @@ import About from "./pages/About.jsx";
 import Services from "./pages/Services.jsx";
 import Contact from "./pages/Contact.jsx";
 import OwnerKey from "./pages/OwnerKey.jsx";
+import LeaveTestimonial from "./pages/LeaveTestimonial.jsx";
 
 function NotFound() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/owner-key" element={<OwnerKey />} />
+          <Route path="/share-your-story" element={<LeaveTestimonial />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

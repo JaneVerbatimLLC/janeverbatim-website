@@ -42,22 +42,19 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
 
-            {/* Photo placeholder */}
+            {/* Founder photo */}
             <div className="lg:col-span-4">
-              <div className="aspect-[4/5] bg-charcoal/5 border-2 border-charcoal flex items-end p-6 relative overflow-hidden max-w-sm">
-                <span
-                  aria-hidden
-                  className="absolute inset-0 flex items-center justify-center font-display font-black text-charcoal/[0.05] select-none"
-                  style={{ fontSize: "160px" }}
-                >
-                  VC
-                </span>
-                <div className="relative z-10 border-t-2 border-charcoal/20 pt-4 w-full">
+              <div className="aspect-[4/5] border-2 border-charcoal relative overflow-hidden max-w-sm">
+                <img
+                  src="/static/vbouy-campbell.jpeg"
+                  alt="Veranthoni 'Vbouy' Campbell — Founder of Jane Verbatim LLC"
+                  className="w-full h-full object-cover object-top"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-charcoal/80 backdrop-blur-sm px-5 py-4 border-t-2 border-clay">
                   <p className="text-clay font-body text-xs font-bold tracking-widest uppercase">Founder</p>
-                  <p className="text-charcoal font-display text-lg mt-1 font-bold">Veranthoni "Vbouy" Campbell</p>
+                  <p className="text-cream font-display text-lg mt-0.5 font-bold">Veranthoni "Vbouy" Campbell</p>
                 </div>
               </div>
-              <p className="mt-4 text-charcoal/35 font-body text-xs italic">Photo coming soon</p>
             </div>
 
             {/* Bio */}
