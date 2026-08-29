@@ -37,6 +37,7 @@ export default function Footer() {
                 { to: "/services", label: "Services" },
                 { to: "/contact", label: "Book a Session" },
                 { to: "/share-your-story", label: "Share Your Story" },
+                { to: "/legal", label: "Legal & Credentials" },
               ].map(({ to, label }) => (
                 <li key={to}>
                   <Link
