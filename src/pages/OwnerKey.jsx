@@ -589,7 +589,7 @@ function AgreementForm() {
                   <label className="block font-body text-xs font-bold text-charcoal/50 uppercase tracking-widest mb-2">Agreement Type <span className="text-clay">*</span></label>
                   <select required value={sendForm.agreement_type} onChange={e => setSendForm(f => ({...f, agreement_type: e.target.value}))}
                     className="w-full border-2 border-charcoal/25 px-4 py-3 font-body text-sm text-charcoal bg-white focus:outline-none focus:border-clay">
-                    <option value="CIA+NDA">CIA + NDA (Recommended)</option>
+                    <option value="CIA+NDA">CIA + NDA — Both (Default)</option>
                     <option value="CIA">Consulting Agreement only</option>
                     <option value="NDA">NDA only</option>
                   </select>

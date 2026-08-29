@@ -339,7 +339,22 @@ export default function SignAgreement() {
                   <pre className="font-body text-xs text-charcoal/65 leading-relaxed whitespace-pre-wrap">{CIA_TEXT}</pre>
                 </div>
               </div>
-              <SignaturePad onSigned={setCiaSig} label="Your signature — Consulting Agreement" />
+              {/* Signature block */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+                {/* Vbouy pre-signed */}
+                <div className="border-2 border-charcoal/15 bg-white p-5">
+                  <p className="font-body text-xs font-bold text-charcoal/40 uppercase tracking-widest mb-3">Jane Verbatim LLC — Consultant</p>
+                  <div className="h-16 flex items-end pb-2 border-b-2 border-charcoal/20 mb-2">
+                    <span className="font-display italic text-3xl text-charcoal/70 leading-none select-none">Veranthoni Campbell</span>
+                  </div>
+                  <p className="font-body text-xs text-charcoal/40">Veranthoni "Vbouy" Campbell</p>
+                  <p className="font-body text-xs text-charcoal/25">Jane Verbatim LLC · Brooklyn, NY</p>
+                </div>
+                {/* Client signature pad */}
+                <div>
+                  <SignaturePad onSigned={setCiaSig} label="Your signature — Client" />
+                </div>
+              </div>
               <label className="flex items-start gap-3 cursor-pointer group mt-5">
                 <div className="relative mt-0.5 shrink-0">
                   <input type="checkbox" checked={ciaAgreed} onChange={e => setCiaAgreed(e.target.checked)} className="sr-only" />
@@ -370,7 +385,22 @@ export default function SignAgreement() {
                   <pre className="font-body text-xs text-charcoal/65 leading-relaxed whitespace-pre-wrap">{NDA_TEXT}</pre>
                 </div>
               </div>
-              <SignaturePad onSigned={setNdaSig} label="Your signature — Non-Disclosure Agreement" />
+              {/* Signature block */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+                {/* Vbouy pre-signed */}
+                <div className="border-2 border-charcoal/15 bg-white p-5">
+                  <p className="font-body text-xs font-bold text-charcoal/40 uppercase tracking-widest mb-3">Jane Verbatim LLC — Disclosing Party</p>
+                  <div className="h-16 flex items-end pb-2 border-b-2 border-charcoal/20 mb-2">
+                    <span className="font-display italic text-3xl text-charcoal/70 leading-none select-none">Veranthoni Campbell</span>
+                  </div>
+                  <p className="font-body text-xs text-charcoal/40">Veranthoni "Vbouy" Campbell</p>
+                  <p className="font-body text-xs text-charcoal/25">Jane Verbatim LLC · Brooklyn, NY</p>
+                </div>
+                {/* Client signature pad */}
+                <div>
+                  <SignaturePad onSigned={setNdaSig} label="Your signature — Receiving Party" />
+                </div>
+              </div>
               <label className="flex items-start gap-3 cursor-pointer group mt-5">
                 <div className="relative mt-0.5 shrink-0">
                   <input type="checkbox" checked={ndaAgreed} onChange={e => setNdaAgreed(e.target.checked)} className="sr-only" />
