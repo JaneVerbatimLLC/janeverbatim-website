@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build --mode preview",
-    "build:prod": "vite build",
+    "build:prod": "vite build && cp dist/index.html dist/404.html",
     "preview": "vite preview"
   },
   "dependencies": {},
