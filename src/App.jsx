@@ -8,6 +8,7 @@ import Contact from "./pages/Contact.jsx";
 import OwnerKey from "./pages/OwnerKey.jsx";
 import LeaveTestimonial from "./pages/LeaveTestimonial.jsx";
 import Legal from "./pages/Legal.jsx";
+import SignAgreement from "./pages/SignAgreement.jsx";
 
 function NotFound() {
   return (
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="/owner-key" element={<OwnerKey />} />
           <Route path="/share-your-story" element={<LeaveTestimonial />} />
           <Route path="/legal" element={<Legal />} />
+          <Route path="/sign/:token" element={<SignAgreement />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

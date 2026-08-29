@@ -330,7 +330,13 @@ function AgreementForm() {
   const [loadingIntake, setLoadingIntake] = useState(true);
   const [testimonials, setTestimonials] = useState([]);
   const [loadingTestimonials, setLoadingTestimonials] = useState(true);
-  const [activeTab, setActiveTab] = useState("intake"); // "intake" | "testimonials" | "view" | "new"
+  const [activeTab, setActiveTab] = useState("intake"); // "intake" | "testimonials" | "view" | "new" | "send"
+  const [clientLinks, setClientLinks] = useState([]);
+  const [loadingLinks, setLoadingLinks] = useState(true);
+  const [sendForm, setSendForm] = useState({ client_name: "", client_email: "", business_name: "", service_scope: "", agreement_type: "CIA+NDA" });
+  const [sendLoading, setSendLoading] = useState(false);
+  const [sendError, setSendError] = useState("");
+  const [generatedLink, setGeneratedLink] = useState(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -358,8 +364,46 @@ function AgreementForm() {
       .catch(err => { if (!err?.isAbort) console.error(err); })
       .finally(() => setLoadingTestimonials(false));
 
+    pb.collection("client_agreements").getList(1, 100, {
+      sort: "-created",
+      signal: controller.signal,
+    })
+      .then(r => setClientLinks(r.items))
+      .catch(err => { if (!err?.isAbort) console.error(err); })
+      .finally(() => setLoadingLinks(false));
+
     return () => controller.abort();
   }, [submitted]);
+
+  async function handleSendAgreement(e) {
+    e.preventDefault();
+    setSendLoading(true);
+    setSendError("");
+    setGeneratedLink(null);
+    try {
+      const token = crypto.randomUUID().replace(/-/g, "");
+      const record = await pb.collection("client_agreements").create({
+        client_name: sendForm.client_name,
+        client_email: sendForm.client_email,
+        business_name: sendForm.business_name,
+        service_scope: sendForm.service_scope,
+        agreement_type: sendForm.agreement_type,
+        signing_token: token,
+        cia_signed: false,
+        nda_signed: false,
+        status: "pending",
+      });
+      const link = `${window.location.origin}${window.location.pathname.replace(/\/$/, "").replace(/\/[^/]*$/, "")}/sign/${token}`;
+      setGeneratedLink({ url: link, name: sendForm.client_name, record });
+      setClientLinks(prev => [record, ...prev]);
+      setSendForm({ client_name: "", client_email: "", business_name: "", service_scope: "", agreement_type: "CIA+NDA" });
+    } catch (err) {
+      setSendError("Could not generate the link. Please try again.");
+      console.error(err);
+    } finally {
+      setSendLoading(false);
+    }
+  }
 
   function set(field, value) {
     setForm(f => ({ ...f, [field]: value }));
@@ -422,8 +466,9 @@ function AgreementForm() {
           {[
             { id: "intake", label: `Intake Forms (${intakeForms.length})` },
             { id: "testimonials", label: `Testimonials (${testimonials.length})` },
-            { id: "view", label: `Agreements (${agreements.length})` },
-            { id: "new", label: "New Agreement" },
+            { id: "send", label: `Send Agreement (${clientLinks.length})` },
+            { id: "view", label: `Old Agreements (${agreements.length})` },
+            { id: "new", label: "Sign In-Person" },
           ].map(tab => (
             <button
               key={tab.id}
@@ -509,6 +554,110 @@ function AgreementForm() {
             setTestimonials={setTestimonials}
             formatDate={formatDate}
           />
+        )}
+
+        {/* Send Agreement Tab */}
+        {activeTab === "send" && (
+          <div>
+            <p className="font-body text-xs text-charcoal/40 uppercase tracking-widest font-bold mb-6">
+              Generate a signing link for a client — share it via text, email, or DM.
+            </p>
+
+            {/* Generate form */}
+            <form onSubmit={handleSendAgreement} className="border-2 border-charcoal p-6 mb-8 space-y-5">
+              <h3 className="font-display font-bold text-charcoal text-lg">Create New Signing Link</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-body text-xs font-bold text-charcoal/50 uppercase tracking-widest mb-2">Client Name <span className="text-clay">*</span></label>
+                  <input required value={sendForm.client_name} onChange={e => setSendForm(f => ({...f, client_name: e.target.value}))}
+                    className="w-full border-2 border-charcoal/25 px-4 py-3 font-body text-sm text-charcoal bg-white focus:outline-none focus:border-clay"
+                    placeholder="Shannon Barrett" />
+                </div>
+                <div>
+                  <label className="block font-body text-xs font-bold text-charcoal/50 uppercase tracking-widest mb-2">Client Email <span className="text-clay">*</span></label>
+                  <input required type="email" value={sendForm.client_email} onChange={e => setSendForm(f => ({...f, client_email: e.target.value}))}
+                    className="w-full border-2 border-charcoal/25 px-4 py-3 font-body text-sm text-charcoal bg-white focus:outline-none focus:border-clay"
+                    placeholder="client@email.com" />
+                </div>
+                <div>
+                  <label className="block font-body text-xs font-bold text-charcoal/50 uppercase tracking-widest mb-2">Business Name</label>
+                  <input value={sendForm.business_name} onChange={e => setSendForm(f => ({...f, business_name: e.target.value}))}
+                    className="w-full border-2 border-charcoal/25 px-4 py-3 font-body text-sm text-charcoal bg-white focus:outline-none focus:border-clay"
+                    placeholder="Clock It" />
+                </div>
+                <div>
+                  <label className="block font-body text-xs font-bold text-charcoal/50 uppercase tracking-widest mb-2">Agreement Type <span className="text-clay">*</span></label>
+                  <select required value={sendForm.agreement_type} onChange={e => setSendForm(f => ({...f, agreement_type: e.target.value}))}
+                    className="w-full border-2 border-charcoal/25 px-4 py-3 font-body text-sm text-charcoal bg-white focus:outline-none focus:border-clay">
+                    <option value="CIA+NDA">CIA + NDA (Recommended)</option>
+                    <option value="CIA">Consulting Agreement only</option>
+                    <option value="NDA">NDA only</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="block font-body text-xs font-bold text-charcoal/50 uppercase tracking-widest mb-2">Service Scope (optional)</label>
+                <input value={sendForm.service_scope} onChange={e => setSendForm(f => ({...f, service_scope: e.target.value}))}
+                  className="w-full border-2 border-charcoal/25 px-4 py-3 font-body text-sm text-charcoal bg-white focus:outline-none focus:border-clay"
+                  placeholder="Brand Identity + Business Formation" />
+              </div>
+              {sendError && <p className="text-red-600 font-body text-sm">{sendError}</p>}
+              <button type="submit" disabled={sendLoading}
+                className="px-8 py-3 bg-charcoal text-cream font-body font-bold text-xs tracking-widest uppercase hover:bg-clay disabled:opacity-50 transition-colors">
+                {sendLoading ? "Generating…" : "Generate Signing Link"}
+              </button>
+            </form>
+
+            {/* Generated link display */}
+            {generatedLink && (
+              <div className="border-2 border-sage bg-sage/5 px-6 py-5 mb-8">
+                <p className="font-body font-bold text-charcoal text-sm mb-1">Link ready for {generatedLink.name}</p>
+                <p className="font-body text-xs text-charcoal/40 mb-3">Copy and send this link directly to your client. It will take them to their personal signing page.</p>
+                <div className="flex flex-col sm:flex-row gap-3 items-start">
+                  <code className="flex-1 bg-white border border-charcoal/15 px-4 py-2.5 font-body text-xs text-charcoal break-all">{generatedLink.url}</code>
+                  <button onClick={() => navigator.clipboard.writeText(generatedLink.url)}
+                    className="px-4 py-2.5 bg-charcoal text-cream font-body font-bold text-xs tracking-widest uppercase hover:bg-clay transition-colors shrink-0">
+                    Copy Link
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* All sent agreements */}
+            <h3 className="font-display font-bold text-charcoal text-base mb-4 border-t border-charcoal/10 pt-6">All Sent Agreements</h3>
+            {loadingLinks ? (
+              <div className="text-charcoal/40 font-body text-sm py-8 text-center">Loading…</div>
+            ) : clientLinks.length === 0 ? (
+              <div className="border-2 border-dashed border-charcoal/20 py-12 text-center">
+                <p className="font-body text-charcoal/40 text-sm">No agreements sent yet.</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {clientLinks.map(cl => {
+                  const signingUrl = `${window.location.origin}${window.location.pathname.replace(/\/$/, "").replace(/\/[^/]*$/, "")}/sign/${cl.signing_token}`;
+                  return (
+                    <div key={cl.id} className={`border-2 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${cl.status === "completed" ? "border-sage/40 bg-sage/3" : "border-charcoal/15"}`}>
+                      <div>
+                        <p className="font-body font-bold text-charcoal text-sm">{cl.client_name}</p>
+                        <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-0.5">
+                          {cl.business_name && <span className="font-body text-xs text-charcoal/40">{cl.business_name}</span>}
+                          <span className="font-body text-xs text-charcoal/30">{cl.agreement_type}</span>
+                          <span className={`font-body text-xs font-bold uppercase tracking-widest ${cl.status === "completed" ? "text-sage" : "text-gold"}`}>
+                            {cl.status === "completed" ? "✓ Signed" : "Pending"}
+                          </span>
+                        </div>
+                        <p className="font-body text-xs text-charcoal/25 mt-0.5">{formatDate(cl.created)}</p>
+                      </div>
+                      <button onClick={() => navigator.clipboard.writeText(signingUrl)}
+                        className="shrink-0 px-4 py-2 border-2 border-charcoal/20 text-charcoal/50 font-body font-bold text-xs tracking-widest uppercase hover:border-charcoal hover:text-charcoal transition-colors">
+                        Copy Link
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         )}
 
         {/* View Agreements Tab */}
