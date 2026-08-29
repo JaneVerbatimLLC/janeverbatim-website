@@ -84,6 +84,28 @@ export default function Footer() {
                   @jane.verbatim.llc
                 </a>
               </li>
+              <li className="flex items-center gap-3">
+                <LinkIcon className="w-4 h-4 text-clay shrink-0" />
+                <a
+                  href="https://www.linkedin.com/in/janeverbatimllc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-cream/45 font-body text-sm hover:text-clay transition-colors"
+                >
+                  LinkedIn — Vbouy Campbell
+                </a>
+              </li>
+              <li className="flex items-center gap-3">
+                <LinkIcon className="w-4 h-4 text-clay shrink-0" />
+                <a
+                  href="https://www.linkedin.com/company/jane-verbatim-llc/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-cream/45 font-body text-sm hover:text-clay transition-colors"
+                >
+                  LinkedIn — Jane Verbatim LLC
+                </a>
+              </li>
             </ul>
           </div>
         </div>

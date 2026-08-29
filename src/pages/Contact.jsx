@@ -304,6 +304,15 @@ export default function Contact() {
                     <a href="https://instagram.com/jane.verbatim.llc" target="_blank" rel="noopener noreferrer" className="text-charcoal/50 font-body text-sm hover:text-clay transition-colors">@jane.verbatim.llc</a>
                   </div>
                 </li>
+                <li className="flex items-start gap-3">
+                  <InstagramIcon className="w-5 h-5 text-clay shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-charcoal font-body font-bold text-sm">LinkedIn</p>
+                    <a href="https://www.linkedin.com/in/janeverbatimllc" target="_blank" rel="noopener noreferrer" className="text-charcoal/50 font-body text-sm hover:text-clay transition-colors">Vbouy Campbell</a>
+                    <span className="text-charcoal/25 font-body text-xs mx-1">·</span>
+                    <a href="https://www.linkedin.com/company/jane-verbatim-llc/" target="_blank" rel="noopener noreferrer" className="text-charcoal/50 font-body text-sm hover:text-clay transition-colors">Jane Verbatim LLC</a>
+                  </div>
+                </li>
               </ul>
             </div>
 
