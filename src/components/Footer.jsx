@@ -114,7 +114,7 @@ export default function Footer() {
         <div className="mt-12 pt-6 border-t border-white/10">
           <div className="flex flex-wrap gap-x-8 gap-y-2 mb-5">
             {[
-              { label: "EIN", value: "39-5158843", note: "Issued July 1, 2026" },
+              { label: "EIN", value: "39-5158843" },
               { label: "NY LLC DOS ID", value: "7528621" },
               { label: "D-U-N-S", value: "13-677-7236" },
               { label: "SAM.gov UEI", value: "SPAJDNMXJ1M1" },

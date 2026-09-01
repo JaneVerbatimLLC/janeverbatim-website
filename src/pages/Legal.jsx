@@ -188,7 +188,7 @@ const CREDENTIALS = [
   { label: "Legal Name", value: "Jane Verbatim LLC" },
   { label: "State of Formation", value: "New York" },
   { label: "Entity Type", value: "Limited Liability Company (LLC)" },
-  { label: "Federal EIN", value: "39-5158843", note: "Issued July 1, 2026" },
+  { label: "Federal EIN", value: "39-5158843" },
   { label: "NY LLC DOS ID", value: "7528621" },
   { label: "D-U-N-S Number", value: "13-677-7236" },
   { label: "SAM.gov UEI", value: "SPAJDNMXJ1M1" },
