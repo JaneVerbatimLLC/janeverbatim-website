@@ -92,7 +92,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-cream/45 font-body text-sm hover:text-clay transition-colors"
                 >
-                  LinkedIn — Vbouy Campbell
+                  LinkedIn — Veranthoni Campbell
                 </a>
               </li>
               <li className="flex items-center gap-3">
